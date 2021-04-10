@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+</head>
+
+<link href="main.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+<body>
+
+    <div class='flex'>
+        <div class='p1'>Player1: <span id="userScore"></span></div>
+        <h1 class='header'>Tic Tac Toe</h1>
+        <div class='p2'>Player2: <span id="CompScore"></span></div>
+      </div>
+      
+      <button id="mode"><i class="far fa-moon"></i></button>
+      <p id="history"></p>
+
+      <div class='grid'>
+        <div class='space' id='one'></div>
+        <div class='space' id='two'></div>
+        <div class='space' id='three'></div>
+        <div class='space' id='four'></div>
+        <div class='space' id='five'></div>
+        <div class='space' id='six'></div>
+        <div class='space' id='seven'></div>
+        <div class='space' id='eight'></div>
+        <div class='space' id='nine'></div>
+      </div> 
+     
+
+      <div class='wrapper'>
+        <button class='reset'>Reset</button>
+      </div>
+
+      <style>
+
+body {
+  background-color: white;
+}
+
+.grid {
+  background-color: rgba(0,0,0,.2);
+  margin: 50px auto;
+  vertical-align: center;
+  width: 400px;
+  height: 400px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 2px;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 17px 50px;
+}
+
+#mode{
+            margin:0px 0% 0px 94%;
+            border:solid 2px white;
+            background-color: white;
+            font-size:20px;
+            
+            
+        }
+
+.space {
+  background-color: white;
+  transition: background-color .5s;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.space:hover {
+  background-color: rgba(0,0,0,0);
+  transition: background-color .5s;
+  cursor: pointer;
+}
+
+.x, .o {
+ font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ font-size: 70px;
+ position: absolute;
+}
+
+.x {
+  color: tomato;
+}
+
+.o {
+  color: #33DBFF;
+}
+
+.header {
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 35px;
+  color: tomato;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.reset {
+  font-size: 20px;
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  color: tomato;
+  background-color: white;
+  border: 1px solid tomato;
+  padding: 5px;
+  transition: border, color, .5s;
+}
+
+.reset:hover {
+  cursor: pointer;
+  color: #33DBFF;
+  border: 1px solid #33DBFF;
+  transition: border, color, .5s;
+}
+
+.reset:focus {
+  outline: none;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.p1, .p2 {
+  font-family: 'IBM Plex Sans Condensed', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+}
+
+.p1 {
+  color: tomato;
+  margin-left: 20px;
+}
+
+.p2 {
+  color: #33DBFF;
+  margin-right: 20px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+      </style>
+
+      <script src="jquery-3.5.1.min.js"></script>
+
+      <script>
+          
+
+          $(document).ready(function(){
+
+            
+            $('#mode').click(function(e){
+                e.preventDefault();
+                let bodyColor=$('body').css('background-color');
+            
+                $('body').css('background-color','rgb(19, 18, 18)')
+                $('#mode').html('<i class="fas fa-moon"></i>');
+            //console.log(bodyColor);
+            if(bodyColor=='rgb(19, 18, 18)'){
+                $('body').css('background-color','white');
+                $('#mode').html('<i class="far fa-moon"></i>');
+            }
+        })
+
+                var computer=['one','two','three','four','five','six','seven','eight','nine'];
+                
+/*
+          $('.space').click(function(){  
+            console.log($(this).attr('id'));
+            $(this).text('X');
+
+
+
+              
+          })
+*/
+
+/*
+
+                $('#one').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                           // console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+                        
+
+                })
+
+                $('#two').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                           // console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#three').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                            //console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#four').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            console.log(compChance);
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                          //  console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+
+                })
+
+                $('#five').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                           // console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#six').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                           // console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#seven').click(function(e){
+                    e.preventDefault();
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                      
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];  
+                            console.log(compChance);
+                        }else{
+                           // console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#eight').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                        }else{
+                            //console.log(compChance);
+                            $('#'+compChance).text('O');   
+                        }
+
+                })
+
+                $('#nine').click(function(){
+                    if($(this).text()=='X' || $(this).text()=='O'){
+                           // console.log($('#one').text()=='X' || $('#one').text()=='O');
+                            alert('This place is already taken!');
+                        }else {
+                            $(this).text('X');
+                        }
+
+                        var compChance=computer[Math.floor(Math.random()*9)];
+                        if($('#'+compChance).text()=='X' || $('#'+compChance).text()=='O'){
+                            var compChance=computer[Math.floor(Math.random()*9)];     
+                            console.log(compChance);
+                            
+                        }else{
+                          //  console.log(compChance);
+                            $('#'+compChance).text('O');   
+                            
+                        }
+
+                })
+                */
+
+                 
+                 
+                
+                
+                
+
+                    var count=0;
+                    var userScore=localStorage.getItem('userScore') ? JSON.parse(localStorage.getItem('userScore')) : 0;
+                    var compScore=localStorage.getItem('compScore') ? JSON.parse(localStorage.getItem('compScore')) : 0;
+
+                    $('#userScore').text(localStorage.getItem('userScore'))
+                    $('#compScore').text(localStorage.getItem('compScore'))
+                    $('#userScore').html(userScore);
+                    $('#CompScore').html(compScore);
+
+                $('.space').click(function(){  
+
+                    if(count%2==0){
+                        if($(this).text()=='X' || $(this).text()=='O'){
+                        alert('This place is already taken!');
+                        }else{
+                            $(this).text('X').css('color','white').css('font-size','70px').css('background-color','tomato');
+                            
+                            
+                            userChance($(this).attr('id'),$(this).text());
+                            count++;
+
+                            
+                            if($('#one').text()=='X' && $('#two').text()=='X' && $('#three').text()=='X'){
+                                alert('Player1 wins');
+                                userScore++;
+                                location.reload();
+                               
+                               
+                            }else if($('#one').text()=='X' && $('#four').text()=='X' && $('#seven').text()=='X'){
+                                alert('Player1 wins');
+                                userScore++;
+                                location.reload();
+                                
+                            }else if($('#three').text()=='X' && $('#six').text()=='X' && $('#nine').text()=='X'){
+                                alert('Player1 wins');
+                                userScore++;
+                                location.reload();
+                                
+                            }else if($('#one').text()=='X' && $('#five').text()=='X' && $('#nine').text()=='X'){
+                                alert('Player1 wins');
+                                userScore++;
+                                location.reload();
+
+                            }else if($('#four').text()=='X' && $('#five').text()=='X' && $('#six').text()=='X'){
+                                  alert('Player1 wins');
+                                  userScore++;
+                                location.reload();
+
+                            }else if($('#seven').text()=='X' && $('#eight').text()=='X' && $('#nine').text()=='X'){
+                                  alert('Player1 wins');
+                                  userScore++;
+                                location.reload();
+
+                            }else if($('#three').text()=='X' && $('#five').text()=='X' && $('#seven').text()=='X'){
+                                  alert('Player1 wins ');
+                                  userScore++;
+                                location.reload();
+
+                            }else if($('#two').text()=='X' && $('#five').text()=='X' && $('#eight').text()=='X'){
+                                alert('Player1 wins');
+                                userScore++;
+                                location.reload();
+
+                            }else if(count===9){
+                                alert('TIE');
+                                location.reload();
+                            }
+                            
+                            $('#userScore').html(userScore);
+                            $('#CompScore').html(compScore);
+                            localStorage.setItem('userScore',JSON.stringify(userScore));
+                            console.log(userScore);
+
+                        }
+                    }else {
+                        if($(this).text()=='X' || $(this).text()=='O'){
+                        alert('This place is already taken!');
+                        }else{
+                            $(this).attr('id');
+                            $(this).text('O').css('color','white').css('font-size','70px').css('background-color','cyan');
+                        compChance($(this).attr('id'),$(this).text());
+                        count++;
+                        
+                             if($('#one').text()=='O' && $('#two').text()=='O' && $('#three').text()=='O'){
+                                alert('Player2 wins');
+                                compScore++;
+                                location.reload();
+                                
+                                
+                            }else if($('#one').text()=='O' && $('#four').text()=='O' && $('#seven').text()=='O'){
+                                alert('Player2 wins');
+                                compScore++;
+                                location.reload();
+
+                            }else if($('#three').text()=='O' && $('#six').text()=='O' && $('#nine').text()=='O'){
+                                   alert('Player2 wins');
+                                   compScore++;
+                                location.reload();
+
+                            }else if($('#one').text()=='O' && $('#five').text()=='O' && $('#nine').text()=='O'){
+                                   alert('Player2 wins');
+                                   compScore++;
+                                location.reload();
+
+                            }else if($('#four').text()=='O' && $('#five').text()=='O' && $('#six').text()=='O'){
+                                alert('Player2 wins');
+                                compScore++;
+                                location.reload();
+
+                            }else if($('#seven').text()=='O' && $('#eight').text()=='O' && $('#nine').text()=='O'){
+                                   alert('Player2 wins');
+                                   compScore++;
+                                location.reload();
+
+                            }else if($('#three').text()=='O' && $('#five').text()=='O' && $('#seven').text()=='O'){
+                                alert('Player2 wins');
+                                compScore++;
+                                location.reload();
+                                
+                            }else if($('#two').text()=='O' && $('#five').text()=='O' && $('#eight').text()=='O'){
+                                alert('Player2 wins');
+                                compScore++;
+                                location.reload();
+
+                            }
+
+                            $('#CompScore').html(compScore);
+                            localStorage.setItem('compScore',JSON.stringify(compScore));
+                            console.log(compScore);
+
+                    
+                    }
+                    
+                }
+
+                   
+                    
+
+                    function userChance(id,text){
+                        console.log('userChance')
+                        console.log(id);
+                       
+                    }
+
+                    function compChance(id,text){
+                        console.log('compChance')
+                        console.log(id);
+                    }
+
+            })
+
+            $('#userScore').text(localStorage.getItem('userScore'))
+            $('#compScore').text(localStorage.getItem('compScore'))
+             
+            $('.reset').click(function(){
+                        localStorage.clear();
+                        location.reload();
+                      
+                    })
+
+        });
+      </script>
+
+    
+</body>
+</html>
